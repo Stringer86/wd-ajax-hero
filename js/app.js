@@ -33,13 +33,13 @@
       var $action = $('<div class="card-action center">');
       var $plot = $('<a class="waves-effect waves-light btn modal-trigger">');
 
-      $plot.attr('href', `#${movie.id}`);
+      $plot.attr('href', `#${movie.imdbID}`);
       $plot.text('Plot Synopsis');
 
       $action.append($plot);
       $card.append($action);
 
-      var $modal = $(`<div id="${movie.id}" class="modal">`);
+      var $modal = $(`<div id="${movie.imdbID}" class="modal">`);
       var $modalContent = $('<div class="modal-content">');
       var $modalHeader = $('<h4>').text(movie.Title);
       var $movieYear = $('<h6>').text(`Released in ${movie.Year}`);
@@ -70,13 +70,24 @@
       return;
   }
   for (var i = 0; i < movie.Search.length; i++) {
-    movies.push(movie.Search[i]);
+    var $id = movie.Search[i].imdbID;
+    var $moreXhr = $.getJSON(`http://www.omdbapi.com/?i=${$id}`);
+    $moreXhr.done(function(m) {
+      // if ($moreXhr.status !== 200) {
+      //   return;
+      // }
+    console.log(m);
+    movies.push(m);
+    renderMovies();
 
-  }
-  console.log(movie);
-  renderMovies();
-  movies.length = 0;
-    });
+
   });
 
+
+
+  }
+  movies.length = 0;
+});
+
+});
 })();
